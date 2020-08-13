@@ -1,5 +1,6 @@
 "use strict";
 
+// 1. html class + js , random number
 let randomNumber = Math.floor(Math.random() * 100) + 1;
 
 let guesses = document.querySelector(".guesses");
@@ -12,12 +13,13 @@ let guessField = document.querySelector(".guessField");
 let guessCount = 1;
 let resetButton;
 
+// 2. check the answer
 function checkGuess() {
   let userGuess = Number(guessField.value);
   if (guessCount === 1) {
     guesses.textContent = "Previous guesses: ";
   }
-  guesses.textContent += userGuess + "";
+  guesses.textContent += userGuess + "  ";
 
   if (userGuess === randomNumber) {
     lastResult.textContent = "Congratulations! You got it right!";
@@ -30,6 +32,7 @@ function checkGuess() {
   } else {
     lastResult.textContent = "Wrong!";
     lastResult.style.backgroundColor = "red";
+
     if (userGuess < randomNumber) {
       lowOrHi.textContent = "Last guess was too low!";
     } else if (userGuess > randomNumber) {
@@ -41,4 +44,37 @@ function checkGuess() {
   guessField.value = "";
   guessField.focus();
 }
+
+// 3.
 guessSubmit.addEventListener("click", checkGuess);
+
+// 4. gameover
+function setGameOver() {
+  guessField.disabled = true;
+  guessSubmit.disabled = true;
+  resetButton = document.createElement("button");
+  resetButton.textContent = "Start new game";
+  document.body.appendChild(resetButton);
+  resetButton.addEventListener("click", resetGame);
+}
+
+// 5. resetgame
+function resetGame() {
+  guessCount = 1;
+
+  let resetParas = document.querySelectorAll(".resultParas p");
+  for (let i = 0; i < resetParas.length; i++) {
+    resetParas[i].textContent = "";
+  }
+
+  resetButton.parentNode.removeChild(resetButton);
+
+  guessField.disabled = false;
+  guessSubmit.disabled = false;
+  guessField.value = "";
+  guessField.focus();
+
+  lastResult.style.backgroundColor = "white";
+
+  randomNumber = Math.floor(Math.random() * 100) + 1;
+}
